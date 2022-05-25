@@ -25,14 +25,6 @@ class Map(object):
                     self.tile_rects.append([self.map[x + y*self.width], pygame.Rect(
                         x * self.tile_width, y * self.height, self.tile_width, self.tile_height)])
 
-    def collide_test(self, rect):
-        hit_boxes = []
-        for tile in self.tile_rects:
-            if rect.colliderect(tile[1]):
-                hit_boxes.append(tile[1])
-        return hit_boxes
-
-
     def display(self, display, scroll):
         for tile in self.tile_rects:
             display.blit(self.database[tile[0]], (tile[1].x - scroll[0], tile[1].y - scroll[1]))

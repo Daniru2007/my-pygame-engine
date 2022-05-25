@@ -1,5 +1,7 @@
 import pygame
 
+from engine.physics import collide_test, PhysicsObject
+
 
 class Entity(object):
     def __init__(self, x, y, width, height, e_type):
@@ -7,6 +9,7 @@ class Entity(object):
         self.y = y
         self.width = width
         self.height = height
+        self.obj = PhysicsObject(self.x, self.y, self.width, self.height)
         self.type = e_type
         self.image = None
         self.flip = False
@@ -26,6 +29,9 @@ class Entity(object):
 
     def set_action(self, action):
         self.action = action
+
+    def rect(self):
+        return pygame.Rect(self.x, self.y, self.width, self.height)
 
     def move(self, tiles):
         self.x += self.movement[0]
