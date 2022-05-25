@@ -4,6 +4,7 @@ import sys
 
 
 import engine as e
+from engine.loadmap import Map
 
 WINDOW_SIZE = [600, 400]
 pygame.init()
@@ -11,15 +12,18 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode(WINDOW_SIZE)
 display = pygame.Surface((300, 200))
 
-player = e.Entity(100, 0, 32, 32, 'idle')
+player = e.Entity(0, 0, 16, 16, 'idle')
 player.set_image(pygame.image.load('data/imgs/player/player_1.png'))
 
+map = Map("data/imgs/tiles", "data/maps/level1")
+
+scroll = [0, 0]
 run = True
 while run:
     display.fill((0, 34, 34))
     player.gravity += 0.2
-    if player.gravity < 2:
-        player.gravity = 2
+    if player.gravity > 5:
+        player.gravity = 5
 
     player.movement = [0, 0]
     for event in pygame.event.get():
@@ -27,7 +31,8 @@ while run:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
-                player.gravity = -6
+                if player.air_time < 6:
+                    player.gravity = -6
             if event.key == pygame.K_RIGHT:
                 player.x_vel = 0
                 player.right = [True, False]
@@ -41,8 +46,8 @@ while run:
                 player.right[1] = True
             if event.key == pygame.K_LEFT:
                 player.left[1] = True
-    if not player.y + player.width > WINDOW_SIZE[1]:
-        player.movement[1] = player.gravity
+
+    player.movement[1] = player.gravity
 
     if player.left[0]:
         if not player.left[1]:
@@ -67,9 +72,15 @@ while run:
                 player.right = [False, True]
         player.movement[0] = player.x_vel
 
-    player.move()
+    collisions = player.move(map.tiles)
+    if collisions["bottom"]:
+        player.gravity = 0
+        player.air_time = 0
 
-    player.display(display, [0, 0])
+    player.air_time += 1
+
+    map.display(display, scroll)
+    player.display(display, scroll)
     screen.blit(pygame.transform.scale(display, WINDOW_SIZE), (0, 0))
     pygame.display.update()
     clock.tick(60)

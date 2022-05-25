@@ -18,7 +18,7 @@ class PhysicsObject(object):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
     def move(self, movement, tiles):
-        collision_types = {
+        collisions = {
             "right": False, "left": False,
             "top": False, "bottom": False
         }
@@ -28,10 +28,11 @@ class PhysicsObject(object):
         for tile in hit_boxes:
             if movement[0] > 0:
                 self.rect.right = tile.left
-                collision_types["right"] = True
+                collisions["right"] = True
             if movement[0] < 0:
                 self.rect.left = tile.right
-            self.x = self.rect.x
+                collisions["left"] = True
+        self.x = self.rect.x
 
         self.y += movement[1]
         self.rect.y += movement[1]
@@ -39,10 +40,10 @@ class PhysicsObject(object):
         for tile in hit_boxes:
             if movement[1] < 0:
                 self.rect.top = tile.bottom
-                collision_types["up"] = True
+                collisions["top"] = True
             if movement[1] > 0:
                 self.rect.bottom = tile.top
-                collision_types["bottom"] = True
-            self.y = self.rect.y
+                collisions["bottom"] = True
+        self.y = self.rect.y
 
-        return collision_types
+        return collisions

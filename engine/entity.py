@@ -1,6 +1,6 @@
 import pygame
 
-from engine.physics import collide_test, PhysicsObject
+from .physics import PhysicsObject
 
 
 class Entity(object):
@@ -23,9 +23,8 @@ class Entity(object):
         self.x_vel = 0
         self.vel = 3
         self.right = [False, False]
-        self.up = False
         self.left = [False, False]
-        self.down = False
+        self.air_time = 0
 
     def set_action(self, action):
         self.action = action
@@ -34,8 +33,10 @@ class Entity(object):
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
     def move(self, tiles):
-        self.x += self.movement[0]
-        self.y += self.movement[1]
+        collisions = self.obj.move(self.movement, tiles)
+        self.x = self.obj.x
+        self.y = self.obj.y
+        return collisions
 
     def set_image(self, image):
         self.image = image
