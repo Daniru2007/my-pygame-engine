@@ -1,4 +1,3 @@
-from curses import KEY_UP
 import pygame
 import sys
 
@@ -24,6 +23,9 @@ while run:
     player.gravity += 0.2
     if player.gravity > 5:
         player.gravity = 5
+
+    scroll[0] += (player.x - scroll[0] - 152) / 10
+    scroll[1] += (player.y - scroll[1] - 106) / 10
 
     player.movement = [0, 0]
     for event in pygame.event.get():
