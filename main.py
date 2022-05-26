@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 
 import engine as e
@@ -16,6 +17,17 @@ player.set_image(pygame.image.load('data/imgs/player/player_1.png'))
 
 map = Map("data/imgs/tiles", "data/maps/level1")
 
+building = pygame.image.load('data/imgs/objects/building.png')
+
+background_objects = []
+
+for i in range(20):
+    background_objects.append([pygame.Rect(random.randint(
+        0, map.act_width), random.randint(0, 500), random.randint(60, 300), map.act_height),
+        round(random.uniform(0.0, 0.5), 2), (random.randint(20, 60), random.randint(90, 255),  random.randint(0, 1))])
+
+background_objects.sort(key=lambda x:x[1], reverse=True )
+
 scroll = [0, 0]
 run = True
 while run:
@@ -26,6 +38,10 @@ while run:
 
     scroll[0] += (player.x - scroll[0] - 152) / 10
     scroll[1] += (player.y - scroll[1] - 106) / 10
+
+    for object in background_objects:
+        display.blit(building,  pygame.Rect(
+            object[0].x - scroll[0] * object[1], object[0].y - scroll[1] * object[1], object[0].width, object[0].height))
 
     player.movement = [0, 0]
     for event in pygame.event.get():

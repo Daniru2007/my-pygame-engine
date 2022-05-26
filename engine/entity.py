@@ -19,7 +19,8 @@ class Entity(object):
         self.action = 'idle'
         self.animation = None
         self.animation_frame = 0
-        self.animation_tags = []
+        self.animation_tags = {}
+        self.animation_database = []
         self.x_vel = 0
         self.vel = 3
         self.right = [False, False]
@@ -28,6 +29,9 @@ class Entity(object):
 
     def set_action(self, action):
         self.action = action
+
+    def load_animations(self, path):
+        pass
 
     def rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)

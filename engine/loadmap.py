@@ -11,6 +11,8 @@ class Map(object):
         self.height = self.map_file["layers"][0]["height"]
         self.tile_height = self.map_file["tileheight"]
         self.tile_width = self.map_file["tilewidth"]
+        self.act_height = self.height * self.tile_height
+        self.act_width = self.width * self.tile_width
         self.database = {}
         for tile in self.map_file["tilesets"]:
             index = tile["firstgid"]
