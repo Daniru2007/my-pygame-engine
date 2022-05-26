@@ -78,6 +78,8 @@ while run:
     if collisions["bottom"]:
         player.gravity = 0
         player.air_time = 0
+    if collisions["top"]:
+        player.gravity = 1
 
     player.air_time += 1
 
