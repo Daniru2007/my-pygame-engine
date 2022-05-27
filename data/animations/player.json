@@ -1,10 +1,10 @@
 {
     "idle":{
-        "path": "imgs/player/idle",
+        "path": "data/imgs/player/idle",
         "data": [1]
     },
     "run":{
-        "path": "imgs/player/run",
+        "path": "data/imgs/player/run",
         "data": [1]
     }
 }

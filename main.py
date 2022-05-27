@@ -14,6 +14,7 @@ display = pygame.Surface((300, 200))
 
 player = e.Entity(0, 0, 16, 16, 'idle')
 player.set_image(pygame.image.load('data/imgs/player/player_1.png'))
+player.load_animations("data/animations/player.json")
 
 map = Map("data/imgs/tiles", "data/maps/level1")
 
@@ -55,15 +56,21 @@ while run:
                 player.x_vel = 0
                 player.right = [True, False]
                 player.left = [False, True]
+                player.set_action('run')
+                player.flip = False
             if event.key == pygame.K_LEFT:
                 player.x_vel = 0
                 player.left = [True, False]
                 player.right = [False, True]
+                player.set_action('run')
+                player.flip = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 player.right[1] = True
+                player.set_action("idle")
             if event.key == pygame.K_LEFT:
                 player.left[1] = True
+                player.set_action("idle")
 
     player.movement[1] = player.gravity
 
@@ -98,6 +105,10 @@ while run:
         player.gravity = 1
 
     player.air_time += 1
+
+    player.animation_frame += 1
+    if player.animation_frame > len(player.animation_database[player.action]) - 1:
+        player.animation_frame = 0
 
     map.display(display, scroll)
     player.display(display, scroll)

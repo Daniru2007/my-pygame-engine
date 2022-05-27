@@ -42,10 +42,9 @@ class Entity(object):
                 path = f"{path}/{action_id}.png"
                 self.animation_tags[action_id] = pygame.image.load(path)
                 action_set = []
-                for i in range(data[item]):
+                for _ in range(data[item]):
                     action_set.append(action_id)
                 self.animation_database[name] = action_set
-
 
     def rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
@@ -60,4 +59,5 @@ class Entity(object):
         self.image = image
 
     def display(self, display, scroll):
-        display.blit(self.image, (self.x - scroll[0], self.y - scroll[1]))
+        image = pygame.transform.flip(self.animation_tags[self.animation_database[self.action][self.animation_frame]], self.flip, False)
+        display.blit(image, (self.x - scroll[0], self.y - scroll[1]))
