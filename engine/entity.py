@@ -1,3 +1,4 @@
+import json
 import pygame
 
 from .physics import PhysicsObject
@@ -20,7 +21,7 @@ class Entity(object):
         self.animation = None
         self.animation_frame = 0
         self.animation_tags = {}
-        self.animation_database = []
+        self.animation_database = {}
         self.x_vel = 0
         self.vel = 3
         self.right = [False, False]
@@ -29,9 +30,22 @@ class Entity(object):
 
     def set_action(self, action):
         self.action = action
+        self.animation_frame = 0
 
     def load_animations(self, path):
-        pass
+        animation = json.load(open(path))
+        for name, action in animation.items():
+            path = action["path"]
+            data = action["data"]
+            for item in range(len(data)):
+                action_id = f"{name}_{item+1}"
+                path = f"{path}/{action_id}.png"
+                self.animation_tags[action_id] = pygame.image.load(path)
+                action_set = []
+                for i in range(data[item]):
+                    action_set.append(action_id)
+                self.animation_database[name] = action_set
+
 
     def rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
