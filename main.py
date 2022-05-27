@@ -29,6 +29,8 @@ for i in range(20):
 
 background_objects.sort(key=lambda x:x[1], reverse=True )
 
+particles = []
+
 scroll = [0, 0]
 run = True
 while run:
@@ -112,6 +114,21 @@ while run:
 
     map.display(display, scroll)
     player.display(display, scroll)
+
+    mx, my = pygame.mouse.get_pos()
+
+    for i in range(20):
+        particles.append([[mx, my + random.uniform(0, 5.5)], 0, 255])
+
     screen.blit(pygame.transform.scale(display, WINDOW_SIZE), (0, 0))
+    for particle in particles.copy():
+
+        particles[particles.index(particle)][1] += 0.5
+        particle[0][1] += random.uniform(-5, 5) + 5
+        particle[0][0] += random.uniform(-5, 5)
+        if particle[1] > 8:
+            particles.remove(particle)
+        particle[2] -= 255 / 40
+        pygame.draw.circle(screen, (particle[2], particle[2], particle[2]), particle[0], particle[1])
     pygame.display.update()
     clock.tick(60)
