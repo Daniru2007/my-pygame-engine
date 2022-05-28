@@ -31,12 +31,7 @@ coin_images = [pygame.image.load('data/imgs/objects/coin_1.png'),
 coin_frame = 0
 
 buildings = []
-coins = [[4, 23],
-        [11, 20],
-        [22, 17],
-        [43, 23],
-        [53, 19]
-        ]
+coins = map.coins
 
 for i in range(20):
     buildings.append([pygame.Rect(random.randint(
@@ -131,13 +126,12 @@ while run:
     for coin in coins.copy():
         if coin_frame <= 7: image = coin_images[0]
         if coin_frame > 7: image = coin_images[1]
-        coin_rect = pygame.Rect(coin[0]*16, coin[1]*16, 16, 16)
-        if coin_rect.colliderect(player.obj.rect):
+        if coin.colliderect(player.obj.rect):
             player.score += 5
             coins.remove(coin)
         else:
             display.blit(image,
-                        ((coin[0] * 16) - scroll[0], (coin[1] * 16) - scroll[1] -2))
+                        (coin.x - scroll[0], coin.y - scroll[1] -2))
     coin_frame += 1
 
     player.air_time += 1

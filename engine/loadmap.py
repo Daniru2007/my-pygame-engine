@@ -21,8 +21,13 @@ class Map(object):
             tile = pygame.image.load(f"{tiles_path}/{tile_image}")
             self.database[index] = tile
         self.tiles = []
+        self.coins = []
         for y in range(self.height):
             for x in range(self.width):
+                if self.map[x + y*self.width] == 3:
+                    self.coins.append(pygame.Rect(x * self.tile_width, y * self.tile_height, self.tile_width, self.tile_height))
+                    continue
+
                 if self.map[x + y*self.width]:
                     self.tiles.append([self.map[x + y*self.width], pygame.Rect(
                         x * self.tile_width, y * self.tile_height, self.tile_width, self.tile_height)])
