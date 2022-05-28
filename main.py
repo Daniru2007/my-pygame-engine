@@ -27,7 +27,7 @@ map = Map("data/imgs/tiles", "data/maps/level1")
 
 building_image = pygame.image.load('data/imgs/objects/building.png')
 coin_images = [pygame.image.load('data/imgs/objects/coin_1.png'),
-            pygame.image.load('data/imgs/objects/coin_2.png')]
+               pygame.image.load('data/imgs/objects/coin_2.png')]
 coin_frame = 0
 
 buildings = []
@@ -124,14 +124,16 @@ while run:
     if coin_frame > 14:
         coin_frame = 0
     for coin in coins.copy():
-        if coin_frame <= 7: image = coin_images[0]
-        if coin_frame > 7: image = coin_images[1]
+        if coin_frame <= 7:
+            image = coin_images[0]
+        if coin_frame > 7:
+            image = coin_images[1]
         if coin.colliderect(player.obj.rect):
             player.score += 5
             coins.remove(coin)
         else:
             display.blit(image,
-                        (coin.x - scroll[0], coin.y - scroll[1] -2))
+                         (coin.x - scroll[0], coin.y - scroll[1] - 2))
     coin_frame += 1
 
     player.air_time += 1
