@@ -6,28 +6,38 @@ import random
 import engine as e
 from engine.loadmap import Map
 
+class Player(e.Entity):
+    def __init__(self, x, y, width, height, e_type):
+        self.score = 0
+        super().__init__(x, y, width, height, e_type)
+
+
 WINDOW_SIZE = [600, 400]
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode(WINDOW_SIZE)
 display = pygame.Surface((300, 200))
 
-player = e.Entity(0, 0, 16, 16, 'idle')
+player = Player(0, 0, 16, 16, 'idle')
 player.set_image(pygame.image.load('data/imgs/player/player_1.png'))
 player.load_animations("data/animations/player.json")
 
 map = Map("data/imgs/tiles", "data/maps/level1")
 
-building = pygame.image.load('data/imgs/objects/building.png')
+building_image = pygame.image.load('data/imgs/objects/building.png')
+coin_images = [pygame.image.load('data/imgs/objects/coin_1.png'),
+            pygame.image.load('data/imgs/objects/coin_2.png')]
+coin_frame = 0
 
-background_objects = []
+buildings = []
+coins = [[4, 23]]
 
 for i in range(20):
-    background_objects.append([pygame.Rect(random.randint(
+    buildings.append([pygame.Rect(random.randint(
         0, map.act_width), random.randint(0, 500), random.randint(60, 300), map.act_height),
         round(random.uniform(0.0, 0.5), 2), (random.randint(20, 60), random.randint(90, 255),  random.randint(0, 1))])
 
-background_objects.sort(key=lambda x:x[1], reverse=True )
+buildings.sort(key=lambda x: x[1], reverse=True)
 
 particles = []
 
@@ -42,9 +52,9 @@ while run:
     scroll[0] += (player.x - scroll[0] - 152) / 10
     scroll[1] += (player.y - scroll[1] - 106) / 10
 
-    for object in background_objects:
-        display.blit(building,  pygame.Rect(
-            object[0].x - scroll[0] * object[1], object[0].y - scroll[1] * object[1], object[0].width, object[0].height))
+    for building in buildings:
+        display.blit(building_image,  pygame.Rect(
+            building[0].x - scroll[0] * building[1], building[0].y - scroll[1] * building[1], building[0].width, building[0].height))
 
     player.movement = [0, 0]
     for event in pygame.event.get():
@@ -106,6 +116,22 @@ while run:
     if collisions["top"]:
         player.gravity = 1
 
+    if coin_frame > 14:
+        coin_frame = 0
+    for coin in coins.copy():
+        if coin_frame <= 7: image = coin_images[0]
+        if coin_frame > 7: image = coin_images[1]
+        coin_rect = pygame.Rect(coin[0]*16, coin[1]*16, 16, 16)
+        if coin_rect.colliderect(player.obj.rect):
+            player.score += 5
+            coins.remove(coin)
+        else:
+            display.blit(image,
+                        ((coin[0] * 16) - scroll[0], (coin[1] * 16) - scroll[1] -2))
+    coin_frame += 1
+
+    print(player.score, end="\r")
+
     player.air_time += 1
 
     player.animation_frame += 1
@@ -129,6 +155,7 @@ while run:
         if particle[1] > 8:
             particles.remove(particle)
         particle[2] -= 255 / 40
-        pygame.draw.circle(screen, (particle[2], particle[2], particle[2]), particle[0], particle[1])
+        pygame.draw.circle(
+            screen, (particle[2], particle[2], particle[2]), particle[0], particle[1])
     pygame.display.update()
     clock.tick(60)
