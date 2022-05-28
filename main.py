@@ -6,6 +6,7 @@ import random
 import engine as e
 from engine.loadmap import Map
 
+
 class Player(e.Entity):
     def __init__(self, x, y, width, height, e_type):
         self.score = 0
@@ -30,7 +31,12 @@ coin_images = [pygame.image.load('data/imgs/objects/coin_1.png'),
 coin_frame = 0
 
 buildings = []
-coins = [[4, 23]]
+coins = [[4, 23],
+        [11, 20],
+        [22, 17],
+        [43, 23],
+        [53, 19]
+        ]
 
 for i in range(20):
     buildings.append([pygame.Rect(random.randint(
@@ -41,9 +47,13 @@ buildings.sort(key=lambda x: x[1], reverse=True)
 
 particles = []
 
+font = pygame.font.Font('data/fonts/B04.ttf', 20)
+
+
 scroll = [0, 0]
 run = True
 while run:
+    text = font.render(f"score: {player.score}", True, (255, 255, 255))
     display.fill((0, 34, 34))
     player.gravity += 0.2
     if player.gravity > 5:
@@ -130,8 +140,6 @@ while run:
                         ((coin[0] * 16) - scroll[0], (coin[1] * 16) - scroll[1] -2))
     coin_frame += 1
 
-    print(player.score, end="\r")
-
     player.air_time += 1
 
     player.animation_frame += 1
@@ -157,5 +165,6 @@ while run:
         particle[2] -= 255 / 40
         pygame.draw.circle(
             screen, (particle[2], particle[2], particle[2]), particle[0], particle[1])
+    screen.blit(text, [0, 0])
     pygame.display.update()
     clock.tick(60)
