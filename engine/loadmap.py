@@ -23,6 +23,7 @@ class Map(object):
         self.tiles = []
         self.coins = []
         self.jumpers = []
+        self.larva = []
         for y in range(self.height):
             for x in range(self.width):
                 if self.map[x + y*self.width] == 3:
@@ -31,6 +32,8 @@ class Map(object):
                 if self.map[x + y*self.width] == 4:
                     self.jumpers.append(pygame.Rect(x * self.tile_width, y * self.tile_height, self.tile_width, self.tile_height))
                     continue
+                if self.map[x + y*self.width] == 5:
+                    self.larva.append(pygame.Rect(x * self.tile_width, y * self.tile_height, self.tile_width, self.tile_height))
 
                 if self.map[x + y*self.width]:
                     self.tiles.append([self.map[x + y*self.width], pygame.Rect(

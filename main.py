@@ -34,6 +34,8 @@ coins = map.coins
 jumper_image = pygame.image.load("data/imgs/tiles/jumper.png")
 jumpers = map.jumpers
 
+larva = map.larva
+
 buildings = []
 
 for i in range(20):
@@ -97,8 +99,6 @@ while run:
             player.gravity = -5
         display.blit(jumper_image, [jumper.x - scroll[0], jumper.y-scroll[1]])
 
-
-
     player.movement[1] = player.gravity
 
     if player.left[0]:
@@ -123,6 +123,19 @@ while run:
                 player.x_vel = 0
                 player.right = [False, True]
         player.movement[0] = player.x_vel
+
+    for tile in larva:
+        player_rect = player.obj.rect.copy()
+        player_rect.y += 2
+        if tile.colliderect(player_rect):
+            print(player.movement)
+            if player.movement[0] > 0:
+                player.movement[0] *= 0.5
+            if player.movement[0] < 0:
+                # BUG(player moving left is not working properly)
+                player.movement[0] *= 0.05
+            player.movement[1] = 0
+            break
 
     collisions = player.move(map.tiles)
     if collisions["bottom"]:
