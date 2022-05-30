@@ -29,9 +29,12 @@ building_image = pygame.image.load('data/imgs/objects/building.png')
 coin_images = [pygame.image.load('data/imgs/objects/coin_1.png'),
                pygame.image.load('data/imgs/objects/coin_2.png')]
 coin_frame = 0
+coins = map.coins
+
+jumper_image = pygame.image.load("data/imgs/tiles/jumper.png")
+jumpers = map.jumpers
 
 buildings = []
-coins = map.coins
 
 for i in range(20):
     buildings.append([pygame.Rect(random.randint(
@@ -68,7 +71,7 @@ while run:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 if player.air_time < 6:
-                    player.gravity = -6
+                    player.gravity = -3
             if event.key == pygame.K_RIGHT:
                 player.x_vel = 0
                 player.right = [True, False]
@@ -88,6 +91,13 @@ while run:
             if event.key == pygame.K_LEFT:
                 player.left[1] = True
                 player.set_action("idle")
+
+    for jumper in jumpers:
+        if jumper.colliderect(player.rect()):
+            player.gravity = -5
+        display.blit(jumper_image, [jumper.x - scroll[0], jumper.y-scroll[1]])
+
+
 
     player.movement[1] = player.gravity
 

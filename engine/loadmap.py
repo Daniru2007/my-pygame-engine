@@ -22,10 +22,14 @@ class Map(object):
             self.database[index] = tile
         self.tiles = []
         self.coins = []
+        self.jumpers = []
         for y in range(self.height):
             for x in range(self.width):
                 if self.map[x + y*self.width] == 3:
                     self.coins.append(pygame.Rect(x * self.tile_width, y * self.tile_height, self.tile_width, self.tile_height))
+                    continue
+                if self.map[x + y*self.width] == 4:
+                    self.jumpers.append(pygame.Rect(x * self.tile_width, y * self.tile_height, self.tile_width, self.tile_height))
                     continue
 
                 if self.map[x + y*self.width]:
