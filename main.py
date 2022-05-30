@@ -56,7 +56,8 @@ font = pygame.font.Font('data/fonts/B04.ttf', 20)
 scroll = [0, 0]
 run = True
 while run:
-    text = font.render(f"score: {player.score}", True, (255, 255, 255))
+    score = font.render(f"score: {player.score}", True, (255, 255, 255))
+    health = font.render(f"health: {round(player.health)}", True, (255, 255, 255))
     display.fill((0, 34, 34))
     player.gravity += 0.2
     if player.gravity > 5:
@@ -178,6 +179,8 @@ while run:
         else:
             display.blit(health_tank_image,
                          (health_tank.x - scroll[0], health_tank.y - scroll[1] - 2))
+    if round(player.health) < 0:
+        run = False
     player.display(display, scroll)
 
     mx, my = pygame.mouse.get_pos()
@@ -196,6 +199,7 @@ while run:
         particle[2] -= 255 / 40
         pygame.draw.circle(
             screen, (particle[2], particle[2], particle[2]), particle[0], particle[1])
-    screen.blit(text, [0, 0])
+    screen.blit(score, [0, 0])
+    screen.blit(health, [0, 20])
     pygame.display.update()
     clock.tick(60)
