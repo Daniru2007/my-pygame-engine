@@ -132,6 +132,7 @@ while run:
         player_rect = player.obj.rect.copy()
         player_rect.y += 2
         if tile.colliderect(player_rect):
+            player.health -= 0.01
             if player.movement[0] > 0:
                 player.movement[0] *= 0.5
             if player.movement[0] < 0:
