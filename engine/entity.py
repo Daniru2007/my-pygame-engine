@@ -27,6 +27,8 @@ class Entity(object):
         self.right = [False, False]
         self.left = [False, False]
         self.air_time = 0
+        self.lose = False
+        self.health = 10
 
     def set_action(self, action):
         self.action = action

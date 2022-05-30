@@ -31,6 +31,9 @@ coin_images = [pygame.image.load('data/imgs/objects/coin_1.png'),
 coin_frame = 0
 coins = map.coins
 
+health_tank_image = pygame.image.load('data/imgs/tiles/health_tank.png')
+health_tanks = map.health_tanks
+
 jumper_image = pygame.image.load("data/imgs/tiles/jumper.png")
 jumpers = map.jumpers
 
@@ -128,7 +131,6 @@ while run:
         player_rect = player.obj.rect.copy()
         player_rect.y += 2
         if tile.colliderect(player_rect):
-            print(player.movement)
             if player.movement[0] > 0:
                 player.movement[0] *= 0.5
             if player.movement[0] < 0:
@@ -166,6 +168,16 @@ while run:
         player.animation_frame = 0
 
     map.display(display, scroll)
+
+    player.health -= 0.01
+    for health_tank in health_tanks.copy():
+        if health_tank.colliderect(player.obj.rect):
+            player.health += 0.1
+            if player.health > 10:
+                player.health = 10
+        else:
+            display.blit(health_tank_image,
+                         (health_tank.x - scroll[0], health_tank.y - scroll[1] - 2))
     player.display(display, scroll)
 
     mx, my = pygame.mouse.get_pos()
