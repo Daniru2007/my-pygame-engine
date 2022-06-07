@@ -11,6 +11,20 @@ class Player(e.Entity):
     def __init__(self, x, y, width, height, e_type):
         self.score = 0
         super().__init__(x, y, width, height, e_type)
+        self.bullet_delay = 0
+        self. bullets = []
+
+
+class Bullet(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def move(self, speed):
+        self.x += speed
+
+    def display(self, display):
+        pygame.draw.circle(display, (0, 0, 0), (self.x, self.y), 2)
 
 
 WINDOW_SIZE = [600, 400]
@@ -90,6 +104,10 @@ while run:
                 player.right = [False, True]
                 player.set_action('run')
                 player.flip = True
+            if event.key == pygame.K_SPACE:
+                if player.bullet_delay <= 0:
+                    player.bullet_delay = 30
+                    player.bullets.append(Bullet(player.x + player.width, player.y+ player.height/2))
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 player.right[1] = True
@@ -97,6 +115,9 @@ while run:
             if event.key == pygame.K_LEFT:
                 player.left[1] = True
                 player.set_action("idle")
+
+    if player.bullet_delay > 0:
+        player.bullet_delay -= 1
 
     for jumper in jumpers:
         if jumper.colliderect(player.rect()):
