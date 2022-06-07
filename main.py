@@ -60,8 +60,8 @@ while run:
     health = font.render(f"health: {round(player.health)}", True, (255, 255, 255))
     display.fill((0, 34, 34))
     player.gravity += 0.2
-    if player.gravity > 5:
-        player.gravity = 5
+    if player.gravity > 8:
+        player.gravity = 8
 
     scroll[0] += (player.x - scroll[0] - 152) / 10
     scroll[1] += (player.y - scroll[1] - 106) / 10
@@ -143,8 +143,8 @@ while run:
 
     if shake > 0:
         shake -= 1
-        scroll[0] += random.randint(0, 8) -4
-        scroll[1] += random.randint(0, 8) -4
+        scroll[0] += random.randint(-4, 4)
+        scroll[1] += random.randint(-4, 4)
 
     collisions = player.move(map.tiles)
     if collisions["bottom"]:
