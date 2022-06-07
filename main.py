@@ -52,7 +52,7 @@ particles = []
 
 font = pygame.font.Font('data/fonts/B04.ttf', 20)
 
-
+shake = 0
 scroll = [0, 0]
 run = True
 while run:
@@ -141,9 +141,16 @@ while run:
             player.movement[1] = 0
             break
 
+    if shake > 0:
+        shake -= 1
+        scroll[0] += random.randint(0, 8) -4
+        scroll[1] += random.randint(0, 8) -4
+
     collisions = player.move(map.tiles)
     if collisions["bottom"]:
         player.gravity = 0
+        if player.air_time >= 50:
+            shake = 20
         player.air_time = 0
     if collisions["top"]:
         player.gravity = 1
