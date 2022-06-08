@@ -5,6 +5,7 @@ import random
 
 import engine as e
 from engine.loadmap import Map
+from engine.physics import collide_test
 
 
 class Player(e.Entity):
@@ -12,19 +13,25 @@ class Player(e.Entity):
         self.score = 0
         super().__init__(x, y, width, height, e_type)
         self.bullet_delay = 0
-        self. bullets = []
+        self.bullets = []
+        self.facing = True # True == right, False == left
 
 
 class Bullet(object):
-    def __init__(self, x, y):
+    def __init__(self, x, y, direction):
         self.x = x
         self.y = y
+        self.direction = 1 if direction else -1
+        self.speed = 5
 
-    def move(self, speed):
-        self.x += speed
+    def move(self):
+        self.x += self.speed * self.direction
 
-    def display(self, display):
-        pygame.draw.circle(display, (0, 0, 0), (self.x, self.y), 2)
+    def rect(self):
+        return pygame.Rect(self.x, self.y, 2, 2)
+
+    def display(self, display, scroll):
+        pygame.draw.circle(display, (0, 0, 0), (self.x - scroll[0], self.y - scroll[1]), 2)
 
 
 WINDOW_SIZE = [600, 400]
@@ -94,20 +101,22 @@ while run:
                     player.gravity = -3
             if event.key == pygame.K_RIGHT:
                 player.x_vel = 0
+                player.facing = True
                 player.right = [True, False]
                 player.left = [False, True]
                 player.set_action('run')
                 player.flip = False
             if event.key == pygame.K_LEFT:
                 player.x_vel = 0
+                player.facing = False
                 player.left = [True, False]
                 player.right = [False, True]
                 player.set_action('run')
                 player.flip = True
             if event.key == pygame.K_SPACE:
                 if player.bullet_delay <= 0:
-                    player.bullet_delay = 30
-                    player.bullets.append(Bullet(player.x + player.width, player.y+ player.height/2))
+                    player.bullet_delay = 20
+                    player.bullets.append(Bullet(player.x + player.width, player.y+ player.height/2, player.facing))
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 player.right[1] = True
@@ -119,11 +128,23 @@ while run:
     if player.bullet_delay > 0:
         player.bullet_delay -= 1
 
+    n = 0
+    while n < len(player.bullets):
+        player.bullets[n].move()
+        player.bullets[n].display(display, scroll)
+        if collide_test(player.bullets[n].rect(), map.tiles):
+            player.bullets.pop(n)
+        elif player.bullets[n].x - scroll[0] < 0 or player.bullets[n].y - scroll[1] < 0 or player.bullets[n].x - scroll[0] > 600 or player.bullets[n].y - scroll[1] > 400:
+            player.bullets.pop(n)
+        else:
+            n += 1
+
     for jumper in jumpers:
         if jumper.colliderect(player.rect()):
             player.gravity = -5
         display.blit(jumper_image, [jumper.x - scroll[0], jumper.y-scroll[1]])
 
+    print(player.bullets, end="\r")
     player.movement[1] = player.gravity
 
     if player.left[0]:
