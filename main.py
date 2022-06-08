@@ -14,7 +14,7 @@ class Player(e.Entity):
         super().__init__(x, y, width, height, e_type)
         self.bullet_delay = 0
         self.bullets = []
-        self.facing = True # True == right, False == left
+        self.facing = True  # True == right, False == left
         self.shoot = False
 
 
@@ -32,7 +32,8 @@ class Bullet(object):
         return pygame.Rect(self.x, self.y, 2, 2)
 
     def display(self, display, scroll):
-        pygame.draw.circle(display, (0, 0, 0), (self.x - scroll[0], self.y - scroll[1]), 2)
+        pygame.draw.circle(display, (0, 0, 0), (self.x -
+                           scroll[0], self.y - scroll[1]), 2)
 
 
 WINDOW_SIZE = [600, 400]
@@ -79,7 +80,8 @@ scroll = [0, 0]
 run = True
 while run:
     score = font.render(f"score: {player.score}", True, (255, 255, 255))
-    health = font.render(f"health: {round(player.health)}", True, (255, 255, 255))
+    health = font.render(
+        f"health: {round(player.health)}", True, (255, 255, 255))
     display.fill((0, 34, 34))
     player.gravity += 0.2
     if player.gravity > 8:
@@ -133,10 +135,11 @@ while run:
         if player.bullet_delay <= 0:
             player.bullet_delay = 20
             if player.facing:
-                player.bullets.append(Bullet(player.x + player.width, player.y+ player.height/2, player.facing))
+                player.bullets.append(
+                    Bullet(player.x + player.width, player.y + player.height/2, player.facing))
             else:
-                player.bullets.append(Bullet(player.x, player.y+ player.height/2, player.facing))
-
+                player.bullets.append(
+                    Bullet(player.x, player.y + player.height/2, player.facing))
 
     n = 0
     while n < len(player.bullets):
@@ -154,7 +157,6 @@ while run:
             player.gravity = -5
         display.blit(jumper_image, [jumper.x - scroll[0], jumper.y-scroll[1]])
 
-    print(player.bullets, end="\r")
     player.movement[1] = player.gravity
 
     if player.left[0]:
