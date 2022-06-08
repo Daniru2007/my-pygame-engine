@@ -15,6 +15,7 @@ class Player(e.Entity):
         self.bullet_delay = 0
         self.bullets = []
         self.facing = True # True == right, False == left
+        self.shoot = False
 
 
 class Bullet(object):
@@ -114,9 +115,7 @@ while run:
                 player.set_action('run')
                 player.flip = True
             if event.key == pygame.K_SPACE:
-                if player.bullet_delay <= 0:
-                    player.bullet_delay = 20
-                    player.bullets.append(Bullet(player.x + player.width, player.y+ player.height/2, player.facing))
+                player.shoot = True
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
                 player.right[1] = True
@@ -124,9 +123,20 @@ while run:
             if event.key == pygame.K_LEFT:
                 player.left[1] = True
                 player.set_action("idle")
+            if event.key == pygame.K_SPACE:
+                player.shoot = False
 
     if player.bullet_delay > 0:
         player.bullet_delay -= 1
+
+    if player.shoot:
+        if player.bullet_delay <= 0:
+            player.bullet_delay = 20
+            if player.facing:
+                player.bullets.append(Bullet(player.x + player.width, player.y+ player.height/2, player.facing))
+            else:
+                player.bullets.append(Bullet(player.x, player.y+ player.height/2, player.facing))
+
 
     n = 0
     while n < len(player.bullets):
