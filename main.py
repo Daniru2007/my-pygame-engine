@@ -47,8 +47,12 @@ class HealthBar(object):
         self.y = y
 
     def display(self, display, scroll):
-        pygame.draw.rect(display, (100, 0, 0), ((self.x- scroll[0])-2, self.y-7 - scroll[1], 20, 5))
-        pygame.draw.rect(display, (0, 100, 0), ((self.x- scroll[0])-2, self.y-7 - scroll[1], self.percent * 2, 5))
+        pygame.draw.rect(display, (150, 0, 0),
+                         ((self.x - scroll[0])-2, self.y-7 - scroll[1], 20, 5))
+        pygame.draw.rect(display, (0, 150, 0), ((
+            self.x - scroll[0])-2, self.y-7 - scroll[1], self.percent * 2, 5))
+        text = font_pixel.render(f"{int(round(self.percent))}", True, (255, 255, 255))
+        display.blit(text, (self.x - scroll[0] + 22, self.y - scroll[1] - 7))
 
 
 WINDOW_SIZE = [600, 400]
@@ -88,16 +92,17 @@ buildings.sort(key=lambda x: x[1], reverse=True)
 
 particles = []
 
-font = pygame.font.Font('data/fonts/B04.ttf', 20)
+font_B04 = pygame.font.Font('data/fonts/B04.ttf', 20)
+font_pixel = pygame.font.Font('data/fonts/pixel.ttf', 8)
 
-health_bar = HealthBar(player.x,player.y)
+health_bar = HealthBar(player.x, player.y)
 
 shake = 0
 scroll = [0, 0]
 run = True
 while run:
-    score = font.render(f"score: {player.score}", True, (255, 255, 255))
-    health = font.render(
+    score = font_B04.render(f"score: {player.score}", True, (255, 255, 255))
+    health = font_B04.render(
         f"health: {round(player.health)}", True, (255, 255, 255))
     display.fill((0, 34, 34))
     player.gravity += 0.2
