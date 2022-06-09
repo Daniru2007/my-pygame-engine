@@ -36,6 +36,21 @@ class Bullet(object):
                            scroll[0], self.y - scroll[1]), 2)
 
 
+class HealthBar(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.percent = 10
+
+    def move(self, x, y):
+        self.x = x
+        self.y = y
+
+    def display(self, display, scroll):
+        pygame.draw.rect(display, (100, 0, 0), ((self.x- scroll[0])-2, self.y-7 - scroll[1], 20, 5))
+        pygame.draw.rect(display, (0, 100, 0), ((self.x- scroll[0])-2, self.y-7 - scroll[1], self.percent * 2, 5))
+
+
 WINDOW_SIZE = [600, 400]
 pygame.init()
 clock = pygame.time.Clock()
@@ -75,6 +90,8 @@ particles = []
 
 font = pygame.font.Font('data/fonts/B04.ttf', 20)
 
+health_bar = HealthBar(player.x,player.y)
+
 shake = 0
 scroll = [0, 0]
 run = True
@@ -86,6 +103,8 @@ while run:
     player.gravity += 0.2
     if player.gravity > 8:
         player.gravity = 8
+
+    health_bar.percent = player.health
 
     scroll[0] += (player.x - scroll[0] - 152) / 10
     scroll[1] += (player.y - scroll[1] - 106) / 10
@@ -181,6 +200,9 @@ while run:
                 player.x_vel = 0
                 player.right = [False, True]
         player.movement[0] = player.x_vel
+
+    health_bar.move(player.x, player.y)
+    health_bar.display(display, scroll)
 
     for tile in larva:
         player_rect = player.obj.rect.copy()
