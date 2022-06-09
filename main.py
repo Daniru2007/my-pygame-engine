@@ -18,6 +18,18 @@ class Player(e.Entity):
         self.shoot = False
 
 
+class Enemy(e.Entity):
+    def __init__(self, x, y, width, height, e_type):
+        super().__init__(x, y, width, height, e_type)
+
+    def display(self, display, scroll):
+        image = pygame.transform.flip(self.image, self.flip, False)
+        display.blit(image, (self.x - scroll[0], self.y - scroll[1]))
+
+    def move(self, tiles):
+        return super().move(tiles)
+
+
 class Bullet(object):
     def __init__(self, x, y, direction):
         self.x = x
@@ -83,6 +95,8 @@ jumpers = map.jumpers
 larva = map.larva
 
 buildings = []
+
+enemies = [Enemy(8*16, 6*16, 16, 16, "enemy")]
 
 for i in range(20):
     buildings.append([pygame.Rect(random.randint(
@@ -163,6 +177,7 @@ while run:
             else:
                 player.bullets.append(
                     Bullet(player.x, player.y + player.height/2, player.facing))
+
 
     n = 0
     while n < len(player.bullets):
@@ -268,6 +283,8 @@ while run:
     if round(player.health) < 0:
         run = False
     player.display(display, scroll)
+    for enemy in enemies:
+        pygame.draw.rect(display, (255, 255, 255), [enemy.x-scroll[0], enemy.y-scroll[1], 16, 16])
 
     mx, my = pygame.mouse.get_pos()
 
