@@ -214,7 +214,6 @@ while run:
             if player.movement[0] > 0:
                 player.movement[0] *= 0.5
             if player.movement[0] < 0:
-                # BUG(player moving left is not working properly)
                 player.movement[0] *= 0.05
             player.movement[1] = 0
             break
