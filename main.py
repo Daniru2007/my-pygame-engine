@@ -51,7 +51,8 @@ class HealthBar(object):
                          ((self.x - scroll[0])-2, self.y-7 - scroll[1], 20, 5))
         pygame.draw.rect(display, (0, 150, 0), ((
             self.x - scroll[0])-2, self.y-7 - scroll[1], self.percent * 2, 5))
-        text = font_pixel.render(f"{int(round(self.percent * 10))}%", True, (255, 255, 255))
+        text = font_pixel.render(
+            f"{int(round(self.percent * 10))}%", True, (255, 255, 255))
         display.blit(text, (self.x - scroll[0] + 22, self.y - scroll[1] - 7))
 
 
