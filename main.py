@@ -187,7 +187,7 @@ while run:
             if player.x_vel >= 3:
                 player.x_vel = 3
         else:
-            player.x_vel -= 0.1
+            player.x_vel -= 0.2
             if player.x_vel <= 0:
                 player.x_vel = 0
                 player.left = [False, True]
