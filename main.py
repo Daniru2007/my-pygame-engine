@@ -51,7 +51,7 @@ class HealthBar(object):
                          ((self.x - scroll[0])-2, self.y-7 - scroll[1], 20, 5))
         pygame.draw.rect(display, (0, 150, 0), ((
             self.x - scroll[0])-2, self.y-7 - scroll[1], self.percent * 2, 5))
-        text = font_pixel.render(f"{int(round(self.percent))}", True, (255, 255, 255))
+        text = font_pixel.render(f"{int(round(self.percent * 10))}%", True, (255, 255, 255))
         display.blit(text, (self.x - scroll[0] + 22, self.y - scroll[1] - 7))
 
 
@@ -102,8 +102,6 @@ scroll = [0, 0]
 run = True
 while run:
     score = font_B04.render(f"score: {player.score}", True, (255, 255, 255))
-    health = font_B04.render(
-        f"health: {round(player.health)}", True, (255, 255, 255))
     display.fill((0, 34, 34))
     player.gravity += 0.2
     if player.gravity > 8:
@@ -207,7 +205,6 @@ while run:
         player.movement[0] = player.x_vel
 
     health_bar.move(player.x, player.y)
-    health_bar.display(display, scroll)
 
     for tile in larva:
         player_rect = player.obj.rect.copy()
@@ -277,6 +274,7 @@ while run:
     for i in range(20):
         particles.append([[mx, my + random.uniform(0, 5.5)], 0, 255])
 
+    health_bar.display(display, scroll)
     screen.blit(pygame.transform.scale(display, WINDOW_SIZE), (0, 0))
     for particle in particles.copy():
 
@@ -289,6 +287,5 @@ while run:
         pygame.draw.circle(
             screen, (particle[2], particle[2], particle[2]), particle[0], particle[1])
     screen.blit(score, [0, 0])
-    screen.blit(health, [0, 20])
     pygame.display.update()
     clock.tick(60)
