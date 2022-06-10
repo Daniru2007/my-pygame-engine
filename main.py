@@ -284,12 +284,19 @@ while run:
         enemies[i].movement = [0, 0]
         enemies[i].movement[0] = 1
         enemies[i].gravity += 0.2
+        enemies[i].air_time += 1
+        if enemies[i].air_time < 0:
+            enemies[i].air_time = 0
         if enemies[i].gravity > 8:
             enemies[i].gravity = 8
         enemies[i].movement[1] = enemies[i].gravity
         collisions = enemies[i].move(map.tiles)
         if collisions["right"] or collisions["left"]:
-            enemies[i].gravity = -2
+            if enemies[i].air_time < 20:
+                enemies[i].gravity = -3
+                enemies[i].air_time = 30
+        if collisions["bottom"]:
+            enemies[i].air_time = 0
         pygame.draw.rect(display, (255, 255, 255), [enemy.x-scroll[0], enemy.y-scroll[1], 16, 16])
 
 
