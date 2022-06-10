@@ -26,9 +26,6 @@ class Enemy(e.Entity):
         image = pygame.transform.flip(self.image, self.flip, False)
         display.blit(image, (self.x - scroll[0], self.y - scroll[1]))
 
-    def move(self, tiles):
-        return super().move(tiles)
-
 
 class Bullet(object):
     def __init__(self, x, y, direction):
@@ -283,8 +280,18 @@ while run:
     if round(player.health) < 0:
         run = False
     player.display(display, scroll)
-    for enemy in enemies:
+    for i, enemy in enumerate(enemies):
+        enemies[i].movement = [0, 0]
+        enemies[i].movement[0] = 1
+        enemies[i].gravity += 0.2
+        if enemies[i].gravity > 8:
+            enemies[i].gravity = 8
+        enemies[i].movement[1] = enemies[i].gravity
+        collisions = enemies[i].move(map.tiles)
+        if collisions["right"] or collisions["left"]:
+            enemies[i].gravity = -2
         pygame.draw.rect(display, (255, 255, 255), [enemy.x-scroll[0], enemy.y-scroll[1], 16, 16])
+
 
     mx, my = pygame.mouse.get_pos()
 
