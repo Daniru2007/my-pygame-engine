@@ -56,6 +56,8 @@ class HealthBar(object):
         self.y = y
 
     def display(self, display, scroll):
+        pygame.draw.rect(display, (255, 255, 255),
+                         ((self.x - scroll[0])-4, self.y-9 - scroll[1], 24, 9))
         pygame.draw.rect(display, (150, 0, 0),
                          ((self.x - scroll[0])-2, self.y-7 - scroll[1], 20, 5))
         pygame.draw.rect(display, (0, 150, 0), ((
