@@ -41,7 +41,7 @@ class Bullet(object):
         return pygame.Rect(self.x, self.y, 2, 2)
 
     def display(self, display, scroll):
-        pygame.draw.circle(display, (0, 0, 0), (self.x -
+        pygame.draw.circle(display, (255, 255, 255), (self.x -
                            scroll[0], self.y - scroll[1]), 2)
 
 
