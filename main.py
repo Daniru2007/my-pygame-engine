@@ -22,10 +22,6 @@ class Enemy(e.Entity):
     def __init__(self, x, y, width, height, e_type):
         super().__init__(x, y, width, height, e_type)
 
-    def display(self, display, scroll):
-        image = pygame.transform.flip(self.image, self.flip, False)
-        display.blit(image, (self.x - scroll[0], self.y - scroll[1]))
-
 
 class Bullet(object):
     def __init__(self, x, y, direction):
@@ -97,6 +93,9 @@ buildings = []
 
 enemies = [Enemy(8*16, 6*16, 16, 16, "enemy"),
             Enemy(9*16, 7*16, 16, 16, "enemy"),]
+
+for i in range(len(enemies)):
+    enemies[i].load_animations("data/animations/enemy.json")
 
 for i in range(20):
     buildings.append([pygame.Rect(random.randint(
@@ -309,8 +308,16 @@ while run:
                 enemies[i].air_time = 30
         if collisions["bottom"]:
             enemies[i].air_time = 0
-        pygame.draw.rect(display, (255, 255, 255), [enemy.x-scroll[0], enemy.y-scroll[1], 16, 16])
+        if enemies[i].movement[0] > 0:
+            enemies[i].flip = False
+            enemies[i].set_action("run")
+        elif enemies[i].movement[0] < 0:
+            enemies[i].set_action("run")
+            enemies[i].flip = True
+        else:
+            enemies[i].set_action("idle")
 
+        enemies[i].display(display, scroll)
 
     mx, my = pygame.mouse.get_pos()
 

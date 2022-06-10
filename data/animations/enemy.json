@@ -1,0 +1,10 @@
+{
+    "idle":{
+        "path": "data/imgs/enemy/idle",
+        "data": [1]
+    },
+    "run":{
+        "path": "data/imgs/enemy/run",
+        "data": [1]
+    }
+}
