@@ -93,7 +93,8 @@ larva = map.larva
 
 buildings = []
 
-enemies = [Enemy(8*16, 6*16, 16, 16, "enemy")]
+enemies = [Enemy(8*16, 6*16, 16, 16, "enemy"),
+            Enemy(9*16, 7*16, 16, 16, "enemy"),]
 
 for i in range(20):
     buildings.append([pygame.Rect(random.randint(
@@ -282,14 +283,23 @@ while run:
     player.display(display, scroll)
     for i, enemy in enumerate(enemies):
         enemies[i].movement = [0, 0]
-        enemies[i].movement[0] = 1
         enemies[i].gravity += 0.2
-        enemies[i].air_time += 1
         if enemies[i].air_time < 0:
             enemies[i].air_time = 0
         if enemies[i].gravity > 8:
             enemies[i].gravity = 8
+        if abs(player.x - enemies[i].x) < 200 and abs(player.y - enemies[i].y) < 200:
+            if player.x - (enemies[i].x+15) > 0:
+                enemies[i].movement[0] = 1
+            elif (player.x+15) - enemies[i].x < 0:
+                enemies[i].movement[0] = -1
+            else:
+                enemies[i].movement[0] = 0
+
+        if enemies[i].rect().colliderect(player.rect()):
+            player.health -= 0.01
         enemies[i].movement[1] = enemies[i].gravity
+        enemies[i].air_time += 1
         collisions = enemies[i].move(map.tiles)
         if collisions["right"] or collisions["left"]:
             if enemies[i].air_time < 20:
