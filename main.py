@@ -21,6 +21,7 @@ class Player(e.Entity):
 class Enemy(e.Entity):
     def __init__(self, x, y, width, height, e_type):
         super().__init__(x, y, width, height, e_type)
+        self.health = 5
 
 
 class Bullet(object):
@@ -95,6 +96,10 @@ enemies = [Enemy(8*16, 6*16, 16, 16, "enemy"),
             Enemy(9*16, 7*16, 16, 16, "enemy"),
             Enemy(35*16, 56*16, 16, 16, "enemy"),
             ]
+
+for i in range(len(enemies)):
+    enemies[i].health_bar = HealthBar(enemies[i].x, enemies[i].y)
+    enemies[i].health_bar.percent = 10
 
 for i in range(len(enemies)):
     enemies[i].load_animations("data/animations/enemy.json")
@@ -321,11 +326,17 @@ while run:
             enemies[i].set_action("idle")
 
         enemies[i].display(display, scroll)
+        enemies[i].health_bar.move(enemies[i].x, enemies[i].y)
+        enemies[i].health_bar.display(display, scroll)
         for bullet in player.bullets:
             if enemies[i].rect().colliderect(bullet.rect()):
-                enemies.pop(i)
-
-        i += 1
+                enemies[i].health -= 2
+                enemies[i].health_bar.percent -= 0.5
+        if enemies[i].health <= 0:
+            enemies.pop(i)
+            player.score += 100
+        else:
+            i += 1
 
     mx, my = pygame.mouse.get_pos()
 
