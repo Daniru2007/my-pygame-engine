@@ -284,7 +284,8 @@ while run:
     if round(player.health) < 0:
         run = False
     player.display(display, scroll)
-    for i, enemy in enumerate(enemies):
+    i = 0
+    while i < len(enemies):
         enemies[i].movement = [0, 0]
         enemies[i].gravity += 0.2
         if enemies[i].air_time < 0:
@@ -320,6 +321,11 @@ while run:
             enemies[i].set_action("idle")
 
         enemies[i].display(display, scroll)
+        for bullet in player.bullets:
+            if enemies[i].rect().colliderect(bullet.rect()):
+                enemies.pop(i)
+
+        i += 1
 
     mx, my = pygame.mouse.get_pos()
 
