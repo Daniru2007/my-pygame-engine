@@ -92,7 +92,9 @@ larva = map.larva
 buildings = []
 
 enemies = [Enemy(8*16, 6*16, 16, 16, "enemy"),
-            Enemy(9*16, 7*16, 16, 16, "enemy"),]
+            Enemy(9*16, 7*16, 16, 16, "enemy"),
+            Enemy(35*16, 56*16, 16, 16, "enemy"),
+            ]
 
 for i in range(len(enemies)):
     enemies[i].load_animations("data/animations/enemy.json")
