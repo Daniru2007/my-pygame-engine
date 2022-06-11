@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import json
 
 
 import engine as e
@@ -70,9 +71,12 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode(WINDOW_SIZE)
 display = pygame.Surface((300, 200))
 
-player = Player(0, 0, 16, 16, 'idle')
+player_data = json.load(open("data/info.json"))
+player = Player(player_data["position"][0], player_data["position"][1], 16, 16, 'idle')
 player.set_image(pygame.image.load('data/imgs/player/player_1.png'))
 player.load_animations("data/animations/player.json")
+
+player.score = player_data["score"]
 
 map = Map("data/imgs/tiles", "data/maps/level1")
 
@@ -358,3 +362,10 @@ while run:
     screen.blit(score, [0, 0])
     pygame.display.update()
     clock.tick(60)
+
+with open('data/info.json', 'r+') as f:
+    data = json.load(f)
+    data["score"] = player.score
+    data["position"] = [player.x, player.y]
+    f.seek(0)
+    json.dump(data, f, indent=4)
