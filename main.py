@@ -72,7 +72,8 @@ screen = pygame.display.set_mode(WINDOW_SIZE)
 display = pygame.Surface((300, 200))
 
 player_data = json.load(open("data/info.json"))
-player = Player(player_data["position"][0], player_data["position"][1], 16, 16, 'idle')
+player = Player(player_data["position"][0],
+                player_data["position"][1], 16, 16, 'idle')
 player.set_image(pygame.image.load('data/imgs/player/player_1.png'))
 player.load_animations("data/animations/player.json")
 
@@ -97,9 +98,9 @@ larva = map.larva
 buildings = []
 
 enemies = [Enemy(8*16, 6*16, 16, 16, "enemy"),
-            Enemy(9*16, 7*16, 16, 16, "enemy"),
-            Enemy(35*16, 56*16, 16, 16, "enemy"),
-            ]
+           Enemy(9*16, 7*16, 16, 16, "enemy"),
+           Enemy(35*16, 56*16, 16, 16, "enemy"),
+           ]
 
 for i in range(len(enemies)):
     enemies[i].health_bar = HealthBar(enemies[i].x, enemies[i].y)
@@ -187,7 +188,6 @@ while run:
             else:
                 player.bullets.append(
                     Bullet(player.x, player.y + player.height/2, player.facing))
-
 
     n = 0
     while n < len(player.bullets):
@@ -349,8 +349,8 @@ while run:
 
     health_bar.display(display, scroll)
     screen.blit(pygame.transform.scale(display, WINDOW_SIZE), (0, 0))
-    for particle in particles.copy():
 
+    for particle in particles.copy():
         particles[particles.index(particle)][1] += 0.5
         particle[0][1] += random.uniform(-5, 5) + 5
         particle[0][0] += random.uniform(-5, 5)
